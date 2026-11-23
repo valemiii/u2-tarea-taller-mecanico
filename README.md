@@ -13,7 +13,7 @@ El modelado completo (workload, decisión de base, ERD, referencias, dato copiad
 
 ```bash
 npm install
-cp .env.example .env            # y cambie JWT_SECRET (32 caracteres o más)
+cp .env.example .env            # complete valores censurados y configure JWT_SECRET
 docker compose up -d            # PostgreSQL, pgAdmin y MongoDB
 npx prisma migrate deploy       # crea las tablas (migración prisma/migrations/20261123000000_init_taller)
 npx prisma generate
@@ -22,6 +22,30 @@ npm run test:modelos            # prueba de los esquemas de Mongoose, sin base d
 ```
 
 Si Prisma detecta diferencias con la migración, regenérela: borre `prisma/migrations/20261123000000_init_taller` y ejecute `npx prisma migrate dev --name init_taller`.
+
+## Puertos y credenciales locales
+
+| Servicio | Puerto en el host | Puerto del contenedor | Acceso local |
+|---|---:|---:|---|
+| API Node.js | `3000` | — | `http://localhost:3000` |
+| PostgreSQL | `55432` | `5432` | Base `espe_db` |
+| pgAdmin | `55050` | `80` | `http://localhost:55050` |
+| MongoDB de Docker Compose | `27017` | `27017` | Base `espe_mongo` |
+| MongoDB usado por la aplicación en este entorno | `27018` | `27017` | Base `espe_mongo` |
+
+La aplicación local se conecta a MongoDB por `localhost:27018`: ese es el contenedor `espe-mongo` que ya estaba ejecutándose en este entorno. El servicio `mongo` de este `docker-compose.yml`, en cambio, publica el puerto `27017`. Para que la aplicación use el MongoDB de Compose, cambie el puerto de `MONGODB_URI` en su `.env` a `27017`.
+
+Credenciales de desarrollo definidas por Docker Compose:
+
+| Servicio | Usuario/correo | Contraseña |
+|---|---|---|
+| PostgreSQL | `espe_user` | `espe_password` |
+| pgAdmin | `admin@espe.com` | `admin_password` |
+| MongoDB de Docker Compose | `espe_user` | `espe_password` |
+
+Estas credenciales son solo para desarrollo local. La URI y credenciales del MongoDB existente en `27018`, así como `JWT_SECRET`, se configuran en `.env`; no comparta ni agregue ese archivo al repositorio. `.env.example` es una plantilla con valores censurados y debe completarse con la configuración del entorno antes de iniciar la aplicación.
+
+La API no incluye un usuario predeterminado: registre uno en `POST /api/auth/register` y obtenga un token en `POST /api/auth/login`.
 
 ## Estructura
 
@@ -54,9 +78,10 @@ docs/          modelo híbrido, ERD y evidencias
 
 Ver la tabla completa en la sección 7 de `docs/Tarea_modelo_hibrido.md`. Las escrituras llevan `Authorization: Bearer <token>` (token de `POST /api/auth/login`).
 
-## Evidencia (pendiente de capturar)
+## Evidencia
 
-- [ ] `docs/run-collection.png`: resumen de **Run collection** de Postman (todo en verde, corrida dos veces).
-- [ ] `docs/compass-colecciones.png` y `docs/compass-indices.png`: colecciones `servicios` y `bitacoras` e índices (`ordenId_1_visita_1` único, `codigo_1` único).
-- [ ] `docs/pgadmin-servicio-id.png`: tabla `ordenes_servicio` con la columna `servicio_id` (el `_id` de MongoDB). Cree antes una orden y **no** corra la limpieza, o ejecute solo hasta la creación.
-- [ ] Video de 5 minutos máximo (ver `docs/GUION_VIDEO.md`).
+- [x] [Ejecución de Postman](docs/POSTMAN%20PASS.png): Run collection en verde.
+- [x] [Colecciones de MongoDB Compass](docs/COMPASS%20LISTO.png): `bitacoras`, `espe_mongo` y `servicios` en `espe_mongo`.
+- [x] [Índices de `servicios` en MongoDB Compass](docs/COMPASS%20INDICES.png): `_id_`, `codigo_1` y `categoria_1_nombre_1`.
+- [x] [Columna `servicio_id` en pgAdmin](docs/pgadmin-servicio-id.png).
+- [ ] Video de 5 minutos máximo (ver `docs/GUION_VIDEO.md`; se grabará externamente).
