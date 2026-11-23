@@ -9,14 +9,14 @@
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: espe-postgres
+    container_name: taller-mecanico-u2-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: espe_user
       POSTGRES_PASSWORD: espe_password
       POSTGRES_DB: espe_db
     ports:
-      - "5432:5432"
+      - "55432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -27,13 +27,13 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:9
-    container_name: espe-pgadmin
+    container_name: taller-mecanico-u2-pgadmin
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@espe.com
       PGADMIN_DEFAULT_PASSWORD: admin_password
     ports:
-      - "5050:80"
+      - "55050:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
@@ -42,7 +42,7 @@ services:
 
   mongo:
     image: mongo:8
-    container_name: espe-mongo
+    container_name: taller-mecanico-u2-mongo
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: espe_user
