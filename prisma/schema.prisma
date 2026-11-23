@@ -1,0 +1,58 @@
+// Tarea U2 · Taller mecánico (caso 5) · modelo híbrido PostgreSQL + MongoDB
+//
+// PostgreSQL (transaccional): User y OrdenServicio.
+//   · User 1:N OrdenServicio (FK userId).
+//   · OrdenServicio.servicioId guarda el _id (24 hex) de un Servicio de MongoDB.
+//     No es FK: PostgreSQL no puede verificar otra base; lo garantiza el servicio (src/services/orden.service.js).
+// MongoDB (catálogo y registro que crece): Servicio y Bitacora (ver src/models/).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EstadoOrden {
+  RECIBIDA
+  EN_DIAGNOSTICO
+  EN_REPARACION
+  LISTA
+  ENTREGADA
+  CANCELADA
+}
+
+// Usuario que se autentica con JWT (login reutilizado del proyecto de grupo)
+model User {
+  id        Int             @id @default(autoincrement())
+  email     String          @unique @db.VarChar(120)
+  password  String          @map("password_hash") // hash bcrypt, nunca texto plano
+  name      String          @db.VarChar(100)
+  createdAt DateTime        @default(now()) @map("created_at")
+  ordenes   OrdenServicio[]
+
+  @@map("users")
+}
+
+// Entidad transaccional: una orden de servicio de un vehículo. 1:N con User.
+model OrdenServicio {
+  id            Int         @id @default(autoincrement())
+  userId        Int         @map("user_id")
+  user          User        @relation(fields: [userId], references: [id], onDelete: Restrict)
+  servicioId    String?     @map("servicio_id") @db.VarChar(24) // _id de MongoDB (Servicio), sin FK
+  placa         String      @db.VarChar(10)
+  marca         String      @db.VarChar(40)
+  modelo        String      @db.VarChar(40)
+  anio          Int?        @db.SmallInt
+  estado        EstadoOrden @default(RECIBIDA)
+  observaciones String?     @db.VarChar(300)
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  @@index([servicioId]) // borrado protegido del catálogo: "¿alguna orden usa este servicio?"
+  @@index([userId, createdAt]) // "mis órdenes" de más nueva a más antigua
+  @@index([estado])
+  @@map("ordenes_servicio")
+}
