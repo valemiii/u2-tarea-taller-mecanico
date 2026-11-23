@@ -1,0 +1,26 @@
+{
+  "name": "taller-mecanico-u2",
+  "version": "1.0.0",
+  "description": "Tarea individual U2 · Taller mecánico · API REST híbrida PostgreSQL (Prisma) + MongoDB (Mongoose)",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "test:modelos": "node scripts/probar-modelos.js"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "9.11.4",
+    "prisma": "^6.19.2"
+  }
+}
