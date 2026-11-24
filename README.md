@@ -84,4 +84,3 @@ Ver la tabla completa en la sección 7 de `docs/Tarea_modelo_hibrido.md`. Las es
 - [x] [Colecciones de MongoDB Compass](docs/COMPASS%20LISTO.png): `bitacoras`, `espe_mongo` y `servicios` en `espe_mongo`.
 - [x] [Índices de `servicios` en MongoDB Compass](docs/COMPASS%20INDICES.png): `_id_`, `codigo_1` y `categoria_1_nombre_1`.
 - [x] [Columna `servicio_id` en pgAdmin](docs/pgadmin-servicio-id.png).
-- [ ] Video de 5 minutos máximo (ver `docs/GUION_VIDEO.md`; se grabará externamente).
