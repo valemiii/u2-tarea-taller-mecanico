@@ -82,5 +82,8 @@ Ver la tabla completa en la sección 7 de `docs/Tarea_modelo_hibrido.md`. Las es
 
 - [x] [Ejecución de Postman](docs/POSTMAN%20PASS.png): Run collection en verde.
 - [x] [Colecciones de MongoDB Compass](docs/COMPASS%20LISTO.png): `bitacoras`, `espe_mongo` y `servicios` en `espe_mongo`.
-- [x] [Índices de `servicios` en MongoDB Compass](docs/COMPASS%20INDICES.png): `_id_`, `codigo_1` y `categoria_1_nombre_1`.
+- [x] [Índices de `servicios` en MongoDB Compass](docs/COMPASS%20INDICES%20SERVICIOS.png): `_id_`, `codigo_1` y `categoria_1_nombre_1`.
+- [x] [Índices de `bitacoras` en MongoDB Compass](docs/COMPASS%20INDICES%20BITACORAS.png).
+- [x] [Índice de la colección `espe_mongo` en MongoDB Compass](docs/COMPASS%20INDICE%20ESPE-MONGO.png).
 - [x] [Columna `servicio_id` en pgAdmin](docs/pgadmin-servicio-id.png).
+- [x] [Orden en pgAdmin con el `_id` de MongoDB guardado en `servicio_id`](docs/CAPTURA%20ID%20DE%20MONGO%20EN%20BD.png).
